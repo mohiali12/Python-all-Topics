@@ -1,8 +1,11 @@
 Python Concepts Repository
-This repository contains a collection of Jupyter Notebooks and datasets designed to help understand fundamental to intermediate Python concepts. It is structured for beginners and learners who want hands-on practice with core programming and data handling topics.
+
+This repository contains a collection of Jupyter Notebooks and datasets designed to help understand fundamental to intermediate Python concepts.
+It is structured for beginners and learners who want hands-on practice with core programming and data handling topics.
 
 
 Repository Structure
+
 Core Python Concepts
 fundamentals.ipynb → Basic syntax, variables, data types
 function.ipynb → Functions, parameters, return values
