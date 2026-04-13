@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON ÉLITE — Luxury Fashion House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F5F0E8;
+    --ivory: #FAF7F2;
+    --charcoal: #1A1A1A;
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --warm-gray: #8A8070;
+    --dark-bg: #0D0D0D;
+    --section-dark: #111010;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--ivory);
+    color: var(--charcoal);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-follower {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+  }
+  body:hover .cursor, body:hover .cursor-follower { opacity: 1; }
+
+  /* Loader */
+  .loader {
+    position: fixed; inset: 0;
+    background: var(--dark-bg);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--cream);
+    letter-spacing: 0.4em;
+    font-weight: 300;
+    animation: fadeInOut 2.5s ease forwards;
+  }
+  .loader-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin-top: 1.2rem;
+    animation: growLine 2.2s ease forwards 0.3s;
+  }
+  @keyframes fadeInOut { 0%{opacity:0} 30%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
+  @keyframes growLine { from{width:0} to{width:200px} }
+
+  /* Navbar */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.6rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.5s ease, padding 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(250,247,242,0.97);
+    backdrop-filter: blur(12px);
+    padding: 1rem 4rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--ivory);
+    text-decoration: none;
+    transition: color 0.4s;
+  }
+  nav.scrolled .nav-logo { color: var(--charcoal); }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,247,242,0.85);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+  }
+  nav.scrolled .nav-links a { color: var(--warm-gray); }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.35s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-links a:hover { color: var(--gold); }
+  nav.scrolled .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--charcoal) !important;
+    background: var(--gold);
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--charcoal) !important; color: var(--gold) !important; }
+  .nav-cta::after { display: none !important; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--dark-bg);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%),
+      url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80') center/cover no-repeat;
+    transform: scale(1.08);
+    transition: transform 0.1s linear;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 6rem 7rem;
+    max-width: 700px;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: heroReveal 1.2s ease forwards 2.8s;
+  }
+  @keyframes heroReveal { to { opacity:1; transform:translateY(0); } }
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    color: var(--cream);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: rgba(245,240,232,0.7);
+    line-height: 2;
+    margin-bottom: 2.5rem;
+    max-width: 400px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 1.2rem; align-items: center; }
+  .btn-primary {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    background: var(--gold);
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--cream); transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.3s, gap 0.3s;
+  }
+  .btn-ghost span { font-size: 1.1rem; }
+  .btn-ghost:hover { color: var(--gold); gap: 1rem; }
+
+  .hero-scroll {
+    position: absolute;
+    right: 4rem; bottom: 5rem;
+    writing-mode: vertical-rl;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(250,247,242,0.5);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: heroReveal 1s ease forwards 3.5s;
+    opacity: 0;
+  }
+  .hero-scroll::after {
+    content: '';
+    display: block;
+    width: 1px; height: 60px;
+    background: var(--gold);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleY(1); opacity:1; }
+    50% { transform: scaleY(0.4); opacity:0.3; }
+  }
+
+  /* MARQUEE STRIP */
+  .marquee-strip {
+    background: var(--charcoal);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    display: flex;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+  .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--warm-gray); }
+
+  /* SECTION STYLES */
+  section { position: relative; }
+  .section-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-tag::before {
+    content: '';
+    display: inline-block;
+    width: 30px; height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* COLLECTIONS */
+  .collections {
+    padding: 8rem 4rem;
+    background: var(--ivory);
+  }
+  .collections-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .collections-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+  }
+  .collection-card {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .collection-card:nth-child(1) { grid-row: 1 / 3; }
+  .collection-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+    filter: saturate(0.85);
+  }
+  .collection-card:nth-child(1) .collection-img { aspect-ratio: auto; height: 100%; }
+  .collection-card:hover .collection-img { transform: scale(1.06); filter: saturate(1); }
+  .collection-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,8,5,0.75) 0%, transparent 50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    transition: background 0.5s ease;
+  }
+  .collection-card:hover .collection-overlay {
+    background: linear-gradient(to top, rgba(10,8,5,0.85) 0%, rgba(10,8,5,0.1) 60%);
+  }
+  .collection-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .collection-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--cream);
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+  }
+  .collection-price {
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+  }
+  .collection-shop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--gold);
+    padding: 0.7rem 1.5rem;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    white-space: nowrap;
+  }
+  .collection-card:hover .collection-shop { opacity: 1; transform: translate(-50%, -50%); }
+
+  /* PHILOSOPHY / SPLIT SECTION */
+  .philosophy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 85vh;
+    background: var(--section-dark);
+  }
+  .phil-image {
+    position: relative;
+    overflow: hidden;
+  }
+  .phil-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+    filter: grayscale(20%);
+  }
+  .phil-image:hover img { transform: scale(1.04); }
+  .phil-content {
+    padding: 6rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--section-dark);
+  }
+  .phil-content .section-tag { color: var(--gold); }
+  .phil-content .section-title { color: var(--cream); margin-bottom: 2rem; }
+  .phil-content .section-title em { font-style: italic; color: var(--gold-light); }
+  .phil-body {
+    font-size: 0.8rem;
+    line-height: 2.2;
+    color: rgba(245,240,232,0.55);
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    max-width: 420px;
+  }
+  .phil-stats {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding-top: 2rem;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    font-weight: 300;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    font-weight: 300;
+  }
+
+  /* FEATURED PRODUCT */
+  .featured {
+    padding: 8rem 4rem;
+    background: var(--ivory);
+  }
+  .featured-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+  }
+  .featured-images {
+    position: relative;
+    height: 600px;
+  }
+  .feat-img-main {
+    position: absolute;
+    top: 0; left: 0;
+    width: 75%;
+    height: 90%;
+    object-fit: cover;
+    z-index: 2;
+    transition: transform 0.6s ease;
+  }
+  .feat-img-accent {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 52%;
+    height: 55%;
+    object-fit: cover;
+    z-index: 3;
+    border: 6px solid var(--ivory);
+    transition: transform 0.6s ease 0.1s;
+  }
+  .featured-images:hover .feat-img-main { transform: translate(-8px, -8px); }
+  .featured-images:hover .feat-img-accent { transform: translate(8px, 8px); }
+  .gold-badge {
+    position: absolute;
+    top: 30px; right: 60px;
+    width: 90px; height: 90px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    animation: rotateBadge 8s linear infinite;
+  }
+  @keyframes rotateBadge { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  .gold-badge-inner {
+    font-size: 0.45rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-align: center;
+    line-height: 1.8;
+    font-weight: 500;
+    animation: rotateBadge 8s linear infinite reverse;
+  }
+  .featured-content { padding: 2rem 0; }
+  .featured-content .section-tag { margin-bottom: 1.2rem; }
+  .featured-content .section-title { margin-bottom: 1.5rem; }
+  .featured-desc {
+    font-size: 0.78rem;
+    line-height: 2.2;
+    color: var(--warm-gray);
+    font-weight: 300;
+    margin-bottom: 2rem;
+    max-width: 400px;
+  }
+  .featured-price-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(138,128,112,0.2);
+  }
+  .price-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--charcoal);
+    font-weight: 400;
+  }
+  .price-old {
+    font-size: 0.9rem;
+    color: var(--warm-gray);
+    text-decoration: line-through;
+    font-weight: 300;
+  }
+  .price-badge {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    background: #E8D5A3;
+    color: var(--charcoal);
+    padding: 0.3rem 0.8rem;
+    font-weight: 500;
+  }
+  .size-picker {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .size-btn {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(138,128,112,0.3);
+    background: transparent;
+    font-size: 0.65rem;
+    color: var(--warm-gray);
+    cursor: none;
+    transition: all 0.2s;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .size-btn:hover, .size-btn.active { border-color: var(--charcoal); color: var(--charcoal); background: var(--cream); }
+  .featured-btns { display: flex; gap: 1rem; }
+  .btn-add {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: var(--charcoal);
+    color: var(--cream);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-add:hover { background: var(--gold); color: var(--charcoal); transform: translateY(-2px); }
+  .btn-wish {
+    width: 50px; height: 50px;
+    border: 1px solid rgba(138,128,112,0.3);
+    background: transparent;
+    cursor: none;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+  }
+  .btn-wish:hover { border-color: #c0392b; color: #c0392b; background: #fff0f0; }
+
+  /* LOOKBOOK */
+  .lookbook {
+    padding: 8rem 0;
+    background: var(--charcoal);
+    overflow: hidden;
+  }
+  .lookbook-header {
+    padding: 0 4rem;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .lookbook-header .section-title { color: var(--cream); }
+  .lookbook-scroll-track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    user-select: none;
+  }
+  .lookbook-scroll-track:active { cursor: grabbing; }
+  .lookbook-scroll-track::-webkit-scrollbar { display: none; }
+  .look-card {
+    flex-shrink: 0;
+    width: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+  .look-card img {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease, filter 0.5s ease;
+    filter: saturate(0.7) brightness(0.9);
+  }
+  .look-card:hover img { transform: scale(1.05); filter: saturate(1) brightness(1); }
+  .look-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 2rem 1.5rem 1.5rem;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .look-card:hover .look-overlay { opacity: 1; transform: translateY(0); }
+  .look-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--cream);
+    font-weight: 300;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .look-price { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.1em; }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    padding: 8rem 4rem;
+    background: var(--cream);
+  }
+  .testimonials-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .testimonials .section-tag { justify-content: center; }
+  .testimonials .section-tag::before { display: none; }
+  .testimonials .section-title { margin-bottom: 4rem; }
+  .testi-track { position: relative; min-height: 200px; }
+  .testi-item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .testi-item.active { opacity: 1; position: relative; }
+  .testi-stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 0.3em; margin-bottom: 1.5rem; }
+  .testi-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--charcoal);
+    font-weight: 300;
+    margin-bottom: 2rem;
+    max-width: 700px;
+  }
+  .testi-author {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    font-weight: 400;
+  }
+  .testi-dots {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+  .testi-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(138,128,112,0.3);
+    cursor: none;
+    border: none;
+    transition: background 0.3s, transform 0.3s;
+    padding: 0;
+  }
+  .testi-dot.active { background: var(--gold); transform: scale(1.3); }
+
+  /* CATEGORIES GRID */
+  .categories {
+    padding: 8rem 4rem;
+    background: var(--ivory);
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    margin-top: 4rem;
+  }
+  .cat-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 2/3;
+    background: var(--charcoal);
+  }
+  .cat-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease, filter 0.5s;
+    filter: brightness(0.75) saturate(0.8);
+  }
+  .cat-card:hover img { transform: scale(1.07); filter: brightness(0.6) saturate(1); }
+  .cat-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .cat-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+  .cat-count { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
+  .cat-link {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%; transform: translateX(-50%) translateY(20px);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--charcoal);
+    padding: 0.5rem 1.2rem;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.4s, transform 0.4s;
+    white-space: nowrap;
+  }
+  .cat-card:hover .cat-link { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* NEWSLETTER */
+  .newsletter {
+    padding: 8rem 4rem;
+    background: var(--charcoal);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter::before {
+    content: 'ÉLITE';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18vw;
+    color: rgba(201,168,76,0.04);
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.2em;
+  }
+  .newsletter .section-tag { justify-content: center; margin-bottom: 1.5rem; }
+  .newsletter .section-tag::before { display: none; }
+  .newsletter .section-title { color: var(--cream); margin-bottom: 1rem; }
+  .newsletter-sub {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.5);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+  }
+  .newsletter-form {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .newsletter-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-right: none;
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .newsletter-input::placeholder { color: rgba(245,240,232,0.3); }
+  .newsletter-input:focus { border-color: var(--gold); }
+  .newsletter-btn {
+    padding: 1rem 2rem;
+    background: var(--gold);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    cursor: none;
+    font-weight: 500;
+    transition: background 0.3s;
+  }
+  .newsletter-btn:hover { background: var(--cream); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark-bg);
+    padding: 5rem 4rem 2.5rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(138,128,112,0.15);
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+  .footer-tagline {
+    font-size: 0.7rem;
+    color: var(--warm-gray);
+    line-height: 2;
+    font-weight: 300;
+    max-width: 250px;
+    margin-bottom: 1.5rem;
+  }
+  .social-links { display: flex; gap: 1rem; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(138,128,112,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+  .footer-col-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-links a {
+    font-size: 0.72rem;
+    color: var(--warm-gray);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.3s;
+    letter-spacing: 0.02em;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+  }
+  .copyright { font-size: 0.62rem; color: rgba(138,128,112,0.6); letter-spacing: 0.1em; }
+  .footer-legal { display: flex; gap: 2rem; }
+  .footer-legal a { font-size: 0.6rem; color: rgba(138,128,112,0.5); text-decoration: none; letter-spacing: 0.1em; }
+  .footer-legal a:hover { color: var(--gold); }
+
+  /* Parallax floating elements */
+  .parallax-shape {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.04;
+  }
+  .shape-circle {
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+  }
+
+  /* Progress bar */
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--gold);
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1.2rem 2rem; }
+    nav.scrolled { padding: 0.8rem 2rem; }
+    .hero-content { padding: 0 3rem 5rem; }
+    .collections { padding: 5rem 2rem; }
+    .collections-grid { grid-template-columns: 1fr 1fr; }
+    .collection-card:nth-child(1) { grid-column: 1/-1; grid-row: auto; }
+    .collection-card:nth-child(1) .collection-img { aspect-ratio: 16/9; height: auto; }
+    .philosophy { grid-template-columns: 1fr; }
+    .phil-image { height: 50vh; }
+    .featured-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .featured-images { height: 450px; }
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-text">MAISON ÉLITE</div>
+  <div class="loader-line"></div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">MAISON ÉLITE</a>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#philosophy">Our Story</a></li>
+    <li><a href="#lookbook">Lookbook</a></li>
+    <li><a href="#categories">Shop</a></li>
+    <li><a href="#" class="nav-cta">Boutique</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SS 2026 Collection</div>
+    <h1 class="hero-title">Crafted for<br>the <em>Discerning</em><br>Few</h1>
+    <p class="hero-subtitle">Where impeccable tailoring meets contemporary silhouettes. Each piece is a testament to enduring luxury.</p>
+    <div class="hero-btns">
+      <a href="#collections" class="btn-primary">Explore Collection</a>
+      <a href="#lookbook" class="btn-ghost">View Lookbook <span>→</span></a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll to Discover</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item">Luxury Tailoring <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Seasonal Collections <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Sustainable Craft <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Exclusive Fabrics <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Bespoke Service <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Timeless Elegance <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Luxury Tailoring <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Seasonal Collections <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Sustainable Craft <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Exclusive Fabrics <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Bespoke Service <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Timeless Elegance <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- COLLECTIONS -->
+<section class="collections" id="collections">
+  <div class="collections-header reveal">
+    <div>
+      <div class="section-tag">New Arrivals</div>
+      <h2 class="section-title">The SS 2026<br>Collection</h2>
+    </div>
+    <a href="#" style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--warm-gray);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;transition:color 0.3s" onmouseover="this.style.color='var(--charcoal)'" onmouseout="this.style.color='var(--warm-gray)'">View All Pieces</a>
+  </div>
+  <div class="collections-grid">
+    <div class="collection-card reveal">
+      <img class="collection-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80" alt="Signature Coat">
+      <div class="collection-overlay">
+        <div class="collection-tag">New Season</div>
+        <div class="collection-name">The Signature Overcoat</div>
+        <div class="collection-price">From $1,250</div>
+      </div>
+      <a href="#" class="collection-shop">Shop Now</a>
+    </div>
+    <div class="collection-card reveal" style="transition-delay:0.15s">
+      <img class="collection-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt="Evening Dress">
+      <div class="collection-overlay">
+        <div class="collection-tag">Evening Wear</div>
+        <div class="collection-name">Silk Column Gown</div>
+        <div class="collection-price">From $890</div>
+      </div>
+      <a href="#" class="collection-shop">Shop Now</a>
+    </div>
+    <div class="collection-card reveal" style="transition-delay:0.3s">
+      <img class="collection-img" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="Tailored Suit">
+      <div class="collection-overlay">
+        <div class="collection-tag">Tailoring</div>
+        <div class="collection-name">Atelier Blazer</div>
+        <div class="collection-price">From $720</div>
+      </div>
+      <a href="#" class="collection-shop">Shop Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="phil-image reveal-left">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Atelier">
+  </div>
+  <div class="phil-content reveal-right">
+    <div class="section-tag">Our Philosophy</div>
+    <h2 class="section-title">Where <em>Craft</em><br>Becomes Art</h2>
+    <p class="phil-body">
+      Every stitch is intentional. Every silhouette is considered. Since our founding in Paris, Maison Élite has stood for the belief that true luxury is not loud — it whispers through the finest cashmere, speaks through hand-finished seams, and endures beyond every passing trend.
+    </p>
+    <div class="phil-stats">
+      <div>
+        <span class="stat-num">38</span>
+        <span class="stat-label">Years of Craft</span>
+      </div>
+      <div>
+        <span class="stat-num">12K+</span>
+        <span class="stat-label">Global Clients</span>
+      </div>
+      <div>
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Sustainable</span>
+      </div>
+    </div>
+    <a href="#" class="btn-primary" style="align-self:flex-start">Discover Our Story</a>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCT -->
+<section class="featured">
+  <div class="featured-inner">
+    <div class="featured-images reveal-left">
+      <img class="feat-img-main" src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=80" alt="Featured">
+      <img class="feat-img-accent" src="https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=500&q=80" alt="Detail">
+      <div class="gold-badge">
+        <div class="gold-badge-inner">BEST<br>SELLER<br>2026</div>
+      </div>
+    </div>
+    <div class="featured-content reveal-right">
+      <div class="section-tag">Staff Pick</div>
+      <h2 class="section-title">The Merino<br>Cashmere Coat</h2>
+      <p class="featured-desc">
+        Hand-loomed in our Florentine atelier from a proprietary blend of 70% merino and 30% cashmere. The structure drapes with sculptural grace while the inner lining — pure Japanese silk — wraps you in incomparable softness.
+      </p>
+      <div class="featured-price-row">
+        <span class="price-main">$1,480</span>
+        <span class="price-old">$1,900</span>
+        <span class="price-badge">SAVE 22%</span>
+      </div>
+      <div style="margin-bottom:0.6rem;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--warm-gray)">Select Size</div>
+      <div class="size-picker">
+        <button class="size-btn">XS</button>
+        <button class="size-btn">S</button>
+        <button class="size-btn active">M</button>
+        <button class="size-btn">L</button>
+        <button class="size-btn">XL</button>
+      </div>
+      <div class="featured-btns">
+        <button class="btn-add">Add to Bag</button>
+        <button class="btn-wish">♡</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOOKBOOK -->
+<section class="lookbook" id="lookbook">
+  <div class="lookbook-header">
+    <div>
+      <div class="section-tag">Editorial</div>
+      <h2 class="section-title">The Lookbook</h2>
+    </div>
+    <a href="#" style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--warm-gray);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px">Drag to explore →</a>
+  </div>
+  <div class="lookbook-scroll-track" id="lookbookTrack">
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80" alt="Look 1">
+      <div class="look-overlay">
+        <span class="look-name">Autumn Reverie</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1475180098004-ca77a66827be?w=500&q=80" alt="Look 2">
+      <div class="look-overlay">
+        <span class="look-name">Urban Refined</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&q=80" alt="Look 3">
+      <div class="look-overlay">
+        <span class="look-name">Evening Grace</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80" alt="Look 4">
+      <div class="look-overlay">
+        <span class="look-name">Spring Minimal</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500&q=80" alt="Look 5">
+      <div class="look-overlay">
+        <span class="look-name">Parisian Dusk</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+    <div class="look-card">
+      <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80" alt="Look 6">
+      <div class="look-overlay">
+        <span class="look-name">The Statement</span>
+        <span class="look-price">Shop the Look</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-tag reveal">Client Stories</div>
+    <h2 class="section-title reveal">Words from<br>Our Patrons</h2>
+    <div class="testi-track">
+      <div class="testi-item active">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Wearing Maison Élite is unlike anything else. The moment I put on the Merino coat, I understood what real luxury means — not a logo, but a feeling."</p>
+        <span class="testi-author">— Sofia Marchetti, Milan</span>
+      </div>
+      <div class="testi-item">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"I've worn every major house. Nothing compares to the craftsmanship here. These pieces don't just last — they become part of who you are."</p>
+        <span class="testi-author">— James Whitmore, London</span>
+      </div>
+      <div class="testi-item">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Their bespoke service is extraordinary. Three fittings, infinite patience, and a suit that made me feel like I was born to wear it."</p>
+        <span class="testi-author">— Amara Diallo, Paris</span>
+      </div>
+    </div>
+    <div class="testi-dots">
+      <button class="testi-dot active" data-index="0"></button>
+      <button class="testi-dot" data-index="1"></button>
+      <button class="testi-dot" data-index="2"></button>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div style="text-align:center" class="reveal">
+    <div class="section-tag" style="justify-content:center"><span style="display:none"></span>Shop by Category</div>
+    <h2 class="section-title">Curated for<br>Every Occasion</h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card reveal">
+      <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?w=500&q=80" alt="Women">
+      <div class="cat-label">
+        <span class="cat-name">Women</span>
+        <span class="cat-count">148 Pieces</span>
+      </div>
+      <a href="#" class="cat-link">Explore →</a>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:0.1s">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Men">
+      <div class="cat-label">
+        <span class="cat-name">Men</span>
+        <span class="cat-count">112 Pieces</span>
+      </div>
+      <a href="#" class="cat-link">Explore →</a>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:0.2s">
+      <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80" alt="Accessories">
+      <div class="cat-label">
+        <span class="cat-name">Accessories</span>
+        <span class="cat-count">64 Pieces</span>
+      </div>
+      <a href="#" class="cat-link">Explore →</a>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:0.3s">
+      <img src="https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=500&q=80" alt="Bespoke">
+      <div class="cat-label">
+        <span class="cat-name">Bespoke</span>
+        <span class="cat-count">By Appointment</span>
+      </div>
+      <a href="#" class="cat-link">Inquire →</a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="section-tag reveal">Stay Connected</div>
+  <h2 class="section-title reveal" style="color:var(--cream);margin-bottom:1rem">Join the Inner Circle</h2>
+  <p class="newsletter-sub reveal">Private previews. First access. Stories from our ateliers.</p>
+  <div class="newsletter-form reveal">
+    <input type="email" class="newsletter-input" placeholder="Your email address">
+    <button class="newsletter-btn">Subscribe</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-logo">MAISON ÉLITE</span>
+      <p class="footer-tagline">Luxury fashion house established in Paris. Crafting enduring elegance for the discerning few since 1988.</p>
+      <div class="social-links">
+        <a class="social-link" href="#">𝕏</a>
+        <a class="social-link" href="#">in</a>
+        <a class="social-link" href="#">📷</a>
+        <a class="social-link" href="#">▶</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Collections</div>
+      <ul class="footer-links">
+        <li><a href="#">Women's SS 2026</a></li>
+        <li><a href="#">Men's SS 2026</a></li>
+        <li><a href="#">The Archive</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Bespoke</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">The House</div>
+      <ul class="footer-links">
+        <li><a href="#">Our Philosophy</a></li>
+        <li><a href="#">Ateliers</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Client Services</div>
+      <ul class="footer-links">
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Care Instructions</a></li>
+        <li><a href="#">Boutique Locator</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="copyright">© 2026 Maison Élite. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2800);
+});
+
+// Custom Cursor
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursorFollower');
+let mx = 0, my = 0, fx = 0, fy = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+function animateFollower() {
+  fx += (mx - fx) * 0.12;
+  fy += (my - fy) *.12;
+  follower.style.left = fx + 'px';
+  follower.style.top = fy + 'px';
+  requestAnimationFrame(animateFollower);
+}
+animateFollower();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    follower.style.width = '56px';
+    follower.style.height = '56px';
+    follower.style.borderColor = 'var(--gold)';
+    follower.style.opacity = '0.4';
+  });
+  el.addEventListener('mouseleave', () => {
+    follower.style.width = '36px';
+    follower.style.height = '36px';
+    follower.style.borderColor = 'var(--gold)';
+    follower.style.opacity = '0.7';
+  });
+});
+
+// Navbar scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  // Scroll progress
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// Hero parallax
+const heroBg = document.getElementById('heroBg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  heroBg.style.transform = `scale(1.08) translateY(${y * 0.3}px)`;
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Size picker
+document.querySelectorAll('.size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Testimonial slider
+const testiItems = document.querySelectorAll('.testi-item');
+const testiDots = document.querySelectorAll('.testi-dot');
+let currentTesti = 0;
+function showTesti(idx) {
+  testiItems.forEach(t => t.classList.remove('active'));
+  testiDots.forEach(d => d.classList.remove('active'));
+  testiItems[idx].classList.add('active');
+  testiDots[idx].classList.add('active');
+  currentTesti = idx;
+}
+testiDots.forEach(dot => {
+  dot.addEventListener('click', () => showTesti(+dot.dataset.index));
+});
+setInterval(() => showTesti((currentTesti + 1) % testiItems.length), 5000);
+
+// Drag-to-scroll lookbook
+const track = document.getElementById('lookbookTrack');
+let isDown = false, startX, scrollL;
+track.addEventListener('mousedown', e => {
+  isDown = true;
+  startX = e.pageX - track.offsetLeft;
+  scrollL = track.scrollLeft;
+  track.style.cursor = 'grabbing';
+});
+track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
+track.addEventListener('mouseup', () => { isDown = false; track.style.cursor = 'grab'; });
+track.addEventListener('mousemove', e => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - track.offsetLeft;
+  track.scrollLeft = scrollL - (x - startX) * 1.5;
+});
+
+// Wishlist button toggle
+document.querySelector('.btn-wish').addEventListener('click', function() {
+  this.textContent = this.textContent === '♡' ? '♥' : '♡';
+  this.style.color = this.textContent === '♥' ? '#c0392b' : '';
+  this.style.background = this.textContent === '♥' ? '#fff0f0' : '';
+  this.style.borderColor = this.textContent === '♥' ? '#c0392b' : '';
+});
+
+// Newsletter submit
+document.querySelector('.newsletter-btn').addEventListener('click', function() {
+  const input = document.querySelector('.newsletter-input');
+  if (input.value.includes('@')) {
+    this.textContent = '✓ Joined';
+    this.style.background = '#2d7a2d';
+    this.style.color = 'white';
+    input.value = '';
+    setTimeout(() => {
+      this.textContent = 'Subscribe';
+      this.style.background = '';
+      this.style.color = '';
+    }, 3000);
+  }
+});
+</script>
+</body>
+</html>
